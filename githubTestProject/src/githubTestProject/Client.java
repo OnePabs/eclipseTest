@@ -9,6 +9,7 @@ public class Client implements ClientInterface{
 	DatagramPacket sendPacket; 
 	DatagramPacket receivePacket;
 	DatagramSocket sendAndReceiveSocket;
+	byte[] packetbytes = new byte[512];
 	boolean complete = false;
 	
 	public Client(){
@@ -50,4 +51,67 @@ public class Client implements ClientInterface{
 	}
 	 
 	
+	public byte[] formatSendMessage(String message){
+		//formats a send data message to be sent by the client using lab specifications
+		//parameters: String representing the message
+		//output: a 512 byte array which has the send specifications as stated in the lab
+		
+		byte[] formatedMessage = new byte[512];
+		byte[] byteMessage = message.getBytes();
+		byte[] mode = "octet".getBytes();
+		int endIndex = 0; //points to the place where the next byte is to be written to
+		
+		//initialize the first two bytes
+		formatedMessage[endIndex++] = 0;
+		formatedMessage[endIndex++] = 1;
+		
+		
+		//get the message into the formatedMessage
+		for(int i=0; i< message.length();i++){
+			formatedMessage[endIndex++] =  byteMessage[i];
+		}
+		
+		formatedMessage[endIndex++] = 0; //insert a zero
+		
+		//insert the mode
+		for(int i=0;i<mode.length;i++){
+			formatedMessage[endIndex++] = mode[i];
+		}
+		
+		formatedMessage[endIndex++] = 0;//insert zero byte
+		
+		return formatedMessage;
+	}
+	
+	public byte[] formatReadMessage(String message){
+		//formats a send data message to be sent by the client using lab specifications
+		//parameters: String representing the message
+		//output: a 512 byte array which has the send specifications as stated in the lab
+		
+		byte[] formatedMessage = new byte[512];
+		byte[] byteMessage = message.getBytes();
+		byte[] mode = "octet".getBytes();
+		int endIndex = 0; //points to the place where the next byte is to be written to
+		
+		//initialize the first two bytes
+		formatedMessage[endIndex++] = 0;
+		formatedMessage[endIndex++] = 2;
+		
+		
+		//get the message into the formatedMessage
+		for(int i=0; i< message.length();i++){
+			formatedMessage[endIndex++] =  byteMessage[i];
+		}
+		
+		formatedMessage[endIndex++] = 0; //insert a zero
+		
+		//insert the mode
+		for(int i=0;i<mode.length;i++){
+			formatedMessage[endIndex++] = mode[i];
+		}
+		
+		formatedMessage[endIndex++] = 0;//insert zero byte
+		
+		return formatedMessage;
+	}
 }
